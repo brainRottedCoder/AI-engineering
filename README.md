@@ -8,11 +8,23 @@ The core structure follows Krish Naik's *Complete AI Engineering Roadmap* video.
 > 1. Work through the modules in order. Skip ahead only if you can already do the "Checkpoint" for a module.
 > 2. For every topic: learn the concept, write notes in `notes/`, then build something small in `projects/`.
 > 3. Tick the checkboxes as you go. Commit often.
+> 4. A topic is only ticked when it passes the **four gates** in [`.cursor/rules/learning-completion.mdc`](.cursor/rules/learning-completion.mdc): **project + evals**, **detailed notes**, **published teach-back (public link)**, and **OA-format quiz (80%+)**.
+
+## Learning Protocol
+
+| Practice | What | When |
+|---|---|---|
+| **Eval-first projects** | Every LLM project has `evals/` (golden set + `run_evals.py`) and a baseline-vs-current metrics table | From Module 3/4 onward |
+| **Mock take-homes** | Timed, fresh-spec builds graded on a rubric (pass 70) | After Phase A, Module 5, Module 7, Phase C, and a final FDE-style one |
+| **Failure journal** | Real bugs and breakages, with root cause and prevention, in `notes/failure.md` | Whenever something breaks (or on purpose, via fault injection) |
+| **Public teach-back** | A short video, thread, or post explaining what you built, with the link logged in `teachbacks/log.md` | Once per project milestone or module |
+| **Spaced review** | 10-question mixed quiz across earlier modules (pass 70) | Every 2 weeks |
 
 ---
 
 ## Table of Contents
 
+- [Learning Protocol](#learning-protocol)
 - [Suggested Repo Structure](#suggested-repo-structure)
 - [Roadmap at a Glance](#roadmap-at-a-glance)
 - [Module 0 ➕ Math & Prerequisites](#module-0--math--prerequisites)
@@ -348,6 +360,14 @@ You do not need a math degree, but you need intuition for how models learn.
 
 > You cannot improve what you cannot measure.
 
+### 8.0 Eval Lite (start in Module 3/4, not here)
+- [ ] A golden set of 20+ examples in `evals/golden.jsonl` for every LLM project
+- [ ] A `run_evals.py` that prints metrics and saves results per run
+- [ ] A baseline-vs-current metrics table in the project README, updated on every prompt, model, or retrieval change
+- [ ] Simple metrics first: exact match, regex, hit@k for retrieval, tool-selection accuracy
+
+The sections below deepen this: judges, RAG and agent metrics, A/B tests, and CI.
+
 ### 8.1 Types of Evals
 - [ ] **LLM evals:** accuracy, relevance, **hallucination**, toxicity, **LLM-as-a-judge**
 - [ ] **RAG evals:** retrieval recall, precision, **groundedness**, **faithfulness**, answer relevance (frameworks: RAGAS, DeepEval, TruLens)
@@ -622,6 +642,8 @@ You do not need a math degree, but you need intuition for how models learn.
 
 ## Progress Tracker
 
+Status: ☐ not started · 🔨 in progress · 📝 gates 1 to 3 done, quiz pending · ✅ all four gates met
+
 | Module | Status | Notes link | Project link |
 |---|---|---|---|
 | 0. Math & prerequisites | ☐ | | |
@@ -653,11 +675,13 @@ You do not need a math degree, but you need intuition for how models learn.
 |---|---|
 | 1 to 2 | Modules 0, 1 |
 | 3 to 4 | Module 2 |
-| 5 to 6 | Modules 3, 4, 5 |
-| 7 to 8 | Modules 6, 7 |
-| 9 to 10 | Modules 8, 9, 10 |
-| 11 to 12 | Modules 11, 12, 13 |
-| 13 to 15 | Modules 14 to 19, capstones, interview prep |
+| 5 to 6 | Modules 3, 4, 5, plus **Eval Lite (8.0)** and take-home #2 |
+| 7 to 8 | Modules 6, 7, plus take-home #3 |
+| 9 to 10 | Modules 8 (full depth), 9, 10 |
+| 11 to 12 | Modules 11, 12, 13, plus take-home #4 |
+| 13 to 15 | Modules 14 to 19, capstones, interview prep, final take-home #5 |
+
+Take-home #1 comes after Modules 0 to 2 (end of month 4). A spaced review runs every 2 weeks throughout.
 
 Adjust freely. If you already know Python and backend basics, start at Module 2 or 3 and fill gaps as you meet them.
 

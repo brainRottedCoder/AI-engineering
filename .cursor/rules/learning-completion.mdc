@@ -1,0 +1,225 @@
+---
+description: Completion rules for the AI-engineering roadmap. A topic is covered only when implemented in a project (with evals), documented in notes, taught publicly, and verified by an OA-format quiz. Also defines take-homes, the failure journal, and spaced review.
+alwaysApply: true
+---
+
+# AI Engineering Roadmap: Definition of "Covered"
+
+This repo is a learning roadmap (`README.md`). Its checkboxes are a record of evidence, not intentions.
+A topic is **covered** only when all **four gates** below are met. The user saying "done" does not count. Check the files.
+
+On top of the gates, the repo runs four ongoing practices: **Eval-first projects**, **mock take-homes**, a **failure journal**, and **spaced review**. They are defined below.
+
+## The four gates
+
+### Gate 1: Implemented in a project (eval-first)
+- The topic is used in working code under `projects/<NN-project-name>/`.
+- Theory-heavy topics (math, ML basics, transformers) are implemented as from-scratch code in a project or notebook, for example `projects/00-math-from-scratch/`.
+- The project has a `README.md` that says which topics it demonstrates, how to run it, and how to test it.
+- The code runs and is committed to git. Reading a tutorial, watching a video, or running someone else's notebook does not count.
+- Add tests where the topic is testable (`pytest`).
+- **Eval-first rule (any project that calls an LLM, from Module 3 onward):**
+  - The project has an `evals/` folder with a golden set `golden.jsonl` (at least 20 examples at the start, growing to 100 by Module 8) and a script `run_evals.py` that prints metrics and saves results to `evals/results/<date>.json`.
+  - Pick metrics that fit the task: exact match or regex, hit@k or recall@k for retrieval, tool-selection accuracy for agents, or LLM-as-judge with a written rubric (check the judge against at least 10 human-labeled examples).
+  - The project README keeps a table of **baseline vs current** metrics. Every prompt, model, chunking, or retrieval change records the metric before and after, in the README changelog or the commit message.
+  - A change that makes the metric worse needs a written reason, or it gets reverted.
+  - Module 8 deepens evals later. A light version starts in Module 3/4.
+- AI-assisted code is allowed, but the user must be able to explain every part of it (see "Quiz rules").
+
+### Gate 2: Detailed notes (with failure evidence)
+- Notes live at `notes/<NN-module-slug>/<topic-slug>.md`, for example `notes/05-rag/hybrid-search.md`.
+- Notes are written in the user's own words while implementing, not after.
+- Every note file uses this template:
+
+```markdown
+# <Topic>
+**Module:** <N> | **Status:** draft | reviewed | **Project:** <relative path to the code>
+
+## What it is (plain-language definition)
+## Why it exists (the problem it solves)
+## How it works (mechanics, diagram or pseudo-code)
+## How I implemented it (link to files and key decisions in the project)
+## Trade-offs and alternatives
+## Failure modes and gotchas (link to my entries in notes/failure.md)
+## Interview Q&A (3 to 5 questions with short answers)
+## References (docs and papers)
+```
+
+- Notes must be specific. Placeholder or one-line notes do not pass this gate.
+- Each module folder has a `notes/<NN-module-slug>/README.md` that indexes its topic notes.
+- The "Failure modes" section must link to **at least one real entry** in the failure journal (see below).
+
+### Gate 3: Teach-back published (public link required)
+The user explains what they built, in public, and records the link. This is the Feynman step and it builds a visible portfolio.
+
+- **Format:** any of a short video (YouTube, Loom-public, LinkedIn, Instagram), an X/Twitter thread, a LinkedIn post, or a blog post (Medium, dev.to, Hashnode, own site). Video should be 2 to 5 minutes. Written pieces should be at least 250 words, with a screenshot or diagram.
+- **Scope:** one published piece may cover several topics, as long as it covers one project milestone or one module's topics. Each topic that is marked covered must be named in the log entry for that piece.
+- **Content:** it must (a) explain the concept in the user's own words, (b) show or describe the working implementation, and (c) mention at least one trade-off or failure from the failure journal.
+- **Safety:** never publish API keys, secrets, private data, or employer or customer data. The agent should offer to scan the draft or script for secrets before the user posts.
+- **Record it:** add a row to `teachbacks/log.md` (see below). The draft script or outline can live at `teachbacks/<NN-module-slug>/<slug>.md`.
+- **Verification:** the link must be a public `http(s)` URL. The agent must try to open it. If it cannot, the agent says "link not verified" and asks the user to confirm that it is public. The gate is not met without a link.
+
+`teachbacks/log.md` format:
+
+```markdown
+| Date | Module | Topics covered | Platform | Format | URL |
+|---|---|---|---|---|---|
+```
+
+### Gate 4: OA-format quiz passed
+- Quizzes live at `quizzes/<NN-module-slug>/`. The question file is `topic-<slug>-quiz-<n>.md` and the answer key is `topic-<slug>-answers-<n>.md`.
+- The user must pass with **80% or higher**.
+- Log every attempt in `quizzes/results.md` (see "Results log").
+- The quiz is unlocked only after Gates 1 to 3 are met.
+
+## Status levels
+
+Use these in the README Progress Tracker and in each notes file header.
+
+| Symbol | Meaning |
+|---|---|
+| ☐ | Not started |
+| 🔨 | In progress (some gates met) |
+| 📝 | Gates 1 to 3 done, quiz pending |
+| ✅ | All four gates met |
+
+- Tick a `- [x]` checkbox in `README.md` only at ✅. Leave `- [ ]` for everything else.
+- When ticking, add the evidence as trailing links, for example:
+  `- [x] **Hybrid search** ([notes](notes/05-rag/hybrid-search.md) · [code](projects/05-rag-chatbot/) · [teach-back](https://...) · [quiz 85%](quizzes/results.md))`
+- Do not tick, or edit the Progress Tracker for, a topic that is missing any gate. If asked to, refuse and list the missing evidence.
+- A module is complete only after: all its topics are ✅, the module OA is passed, and the module's Checkpoint is demonstrated.
+- A **phase** (A, B, C, D in the README) is complete only after its take-home is passed (see below).
+
+## Quiz rules (OA format)
+
+Quizzes simulate online assessments (HackerRank, CodeSignal, and company screens).
+
+**Topic quiz** (one topic or a small group of related topics): 6 to 10 questions, 20 to 30 minutes.
+
+**Module OA** (when all topics in a module are covered): 20 to 25 questions, 45 to 60 minutes, covers the whole module. Pass mark: **75%**.
+
+**Sections (mix by what fits the topic):**
+1. **MCQ (single answer):** concepts and trade-offs.
+2. **Multi-select:** "choose all that apply". Wrong picks lose marks.
+3. **Output prediction:** short code snippet, "what does this print or return?"
+4. **Debug the code:** find the bug in an LLM, RAG, agent, or API snippet.
+5. **Coding task:** a small function against hidden tests (Python/SQL).
+6. **Scenario / short design:** 3 to 6 sentences. Example: "Retrieval quality dropped after a re-index. List your debugging steps in order."
+7. **Project-specific (required, at least 2):** about the user's own implementation. Examples: "Why did you pick that chunk size?", "What does your code do when the API call times out?". The user answers from understanding, not from memory of AI output.
+8. **Failure-journal question (required, at least 1 in module OAs):** built from one of the user's own `notes/failure.md` entries, for example "Why did this break and how would you prevent it?".
+
+**Question quality:**
+- Test understanding and application, not memorized definitions.
+- Use realistic distractors. Mark difficulty on each question (about 30% easy, 50% medium, 20% hard).
+- Every question maps to a specific README topic.
+- Generate fresh questions for every attempt. Never reuse a retake's questions.
+
+**Running a quiz (agent behavior):**
+- The quiz file has only questions, points, and the time limit. No answers.
+- The answer key goes in a separate file. Do not reveal answers, hints, or the key until the user submits.
+- Grade honestly with per-question feedback, a short explanation for each miss, and a link to the relevant notes section.
+- Partial credit is allowed on multi-select and short-answer items, with the rubric in the answer key.
+- Below the pass mark: the topic stays at 📝. The user reviews the notes and retakes a new quiz after at least 24 hours. Any topic area scoring below 60% inside a module OA is flagged for re-study. Log the miss in `notes/failure.md` if it was a real misunderstanding.
+
+## Results log
+
+Maintain `quizzes/results.md`, one row per attempt (including failures):
+
+```markdown
+| Date | Module | Topic / OA / Review | Attempt | Score | Time taken | Weak areas | Result |
+|---|---|---|---|---|---|---|---|
+```
+
+## Practice A: Failure journal (`notes/failure.md`)
+
+A running log of what broke and what it taught. These entries become interview stories and feed quizzes.
+
+**When to add an entry:** a bug that took over 30 minutes; a wrong assumption; an eval metric that dropped; a production-style failure (timeouts, rate limits, hallucinations, bad retrieval, injection); a quiz or take-home miss caused by a real misunderstanding.
+
+**Entry template:**
+
+```markdown
+### YYYY-MM-DD: <short title>
+- **Module / topic / project:**
+- **Symptom:** what I saw (error, bad output, metric drop)
+- **Expected vs actual:**
+- **Root cause:** the real reason, not the first guess
+- **Fix:** what I changed (link to commit)
+- **Detection and prevention:** the test, eval, alert, or guardrail that would catch it next time
+- **Interview story (2 lines, STAR style):**
+```
+
+**Rules:**
+- Entries must be real. The agent never invents or "pads" journal entries.
+- If a topic worked first time, the user must **break it on purpose** (fault injection: a timeout, a malformed response, a poisoned document, a bad chunk size), record what happened, and log it.
+- Newest entries go at the top. Keep each entry under 15 lines.
+
+## Practice B: Mock take-homes (one per phase boundary)
+
+Real AI hiring uses time-boxed take-homes. These practice that, with a fresh spec each time.
+
+| # | After | Time box | Brief |
+|---|---|---|---|
+| 1 | Phase A (Modules 0 to 2) | 3 hours | Python + FastAPI service with tests, plus a small ML model behind an endpoint |
+| 2 | Module 5 (RAG) | 4 hours | RAG API over a supplied document set, with an eval and a write-up |
+| 3 | Module 7 (agents and orchestration) | 4 hours | Tool-using agent with state, a retry/stop policy, and an eval |
+| 4 | Phase C (Modules 8 to 13) | 4 hours | Harden an earlier take-home: tracing, guardrails, Dockerfile, CI, cost and latency report |
+| 5 | Phase D (final) | 6 hours | FDE-style ambiguous customer brief, built and presented in a 10-minute recorded walkthrough (publishable as a teach-back) |
+
+**Structure:** `takehomes/<NN-name>/` contains `SPEC.md` (the brief and the resource policy), `submission/`, and `WRITEUP.md`. The grading rubric lives in `RUBRIC.md` and stays hidden until after submission.
+
+**Rules:**
+- The agent writes a **fresh, realistic spec** each time, with acceptance criteria. It does not reuse an earlier spec.
+- Time is tracked by git: a commit named `start: <name>` at the beginning, and the final commit within the time box (10% grace).
+- During the timer the agent answers **clarifying questions only**, like a recruiter. No hints, no code, no debugging help.
+- Default resource policy: official docs and search are allowed, coding agents are off (mirrors a real OA). Take-home 5 may allow agents, and the SPEC states this. If agents are allowed, the user logs where they used them.
+- `WRITEUP.md` (1 page): design decisions, trade-offs, what is not done, what I would do with more time, and the eval results.
+
+**Rubric (100 points):** correctness 30, code quality and tests 20, evals 15, design and trade-offs write-up 15, error handling and robustness 10, security and cost awareness 10.
+
+**Pass mark:** 70. Below 70: log the gaps in `notes/failure.md`, review, and retry a new spec after at least 24 hours. Log every attempt in `takehomes/results.md`:
+
+```markdown
+| Date | Take-home | Time used | Score | Strengths | Gaps | Result |
+|---|---|---|---|---|---|---|
+```
+
+## Practice C: Spaced review (every 2 weeks)
+
+A 10-question mixed quiz that stops covered topics from fading.
+
+- **When:** every 14 days after the first covered module. When a session starts, check the last review date in `quizzes/results.md`. If 14 or more days have passed, remind the user. If there is no review yet but at least 2 topics are ✅, offer the first one.
+- **Format:** 10 questions, 20 minutes, in OA format. Stored at `quizzes/reviews/review-YYYY-MM-DD.md` (answers in a separate key file).
+- **Mix:** weighted toward **older** covered modules. At least 3 questions from weak areas in `quizzes/results.md` and `quizzes/review-queue.md`. At least 1 question built from the failure journal. At least 1 coding or debug question.
+- **Pass mark:** 70%.
+- **Misses:** every missed topic goes into `quizzes/review-queue.md` and must appear again in the next review.
+- **Downgrade rule:** a topic missed in two consecutive reviews drops from ✅ to 📝. Untick its checkbox until the user passes a new topic quiz for it.
+- Log reviews in `quizzes/results.md` with "Review" in the Topic column.
+
+## How the agent should help
+
+- **While the user builds:** explain concepts, review code, point out mistakes, and suggest tests and eval cases. Prefer guiding to the answer over silently producing finished code for core topics. If the user asks for a full implementation, provide it and flag the topic as one the user must be able to re-explain in the quiz.
+- **After a milestone:** offer a notes skeleton (headings and prompts to fill in), but never write "How I implemented it" or "Failure modes" for the user. Those come from real experience. Offer a teach-back outline and a secret scan of the draft.
+- **When asked "is topic X covered?":** check all four gates against the actual files and report ✅ or list exactly what is missing.
+- **When asked for a quiz:** confirm Gates 1 to 3 exist first. If not, say what is missing instead of generating a quiz.
+- **When a take-home or review is due:** remind the user, and say which one is next.
+- **Keep the repo consistent:** when a topic is covered, update the README checkbox and Progress Tracker in the same change, with the evidence links.
+- **Be honest:** never inflate scores, never mark topics covered on trust, and never skip a gate to be encouraging.
+
+## Folder conventions
+
+```
+notes/<NN-module-slug>/            # topic notes, e.g. 05-rag, 06-agents
+notes/failure.md                   # failure journal
+projects/<NN-project-name>/        # each with README.md and evals/ (for LLM projects)
+teachbacks/log.md                  # published links
+teachbacks/<NN-module-slug>/       # teach-back scripts and outlines
+quizzes/<NN-module-slug>/          # question files and answer keys
+quizzes/reviews/                   # spaced-review quizzes
+quizzes/review-queue.md            # topics to re-test
+quizzes/results.md                 # attempt log
+takehomes/<NN-name>/               # SPEC, RUBRIC, submission, WRITEUP
+takehomes/results.md               # take-home log
+```
+
+Create these folders and files only when needed. Do not create empty placeholders for modules the user has not started.
